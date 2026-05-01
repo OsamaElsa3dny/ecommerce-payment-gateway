@@ -1,0 +1,21 @@
+{
+  "name": "ecommerce-payment-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OsamaElsa3dny/ecommerce-payment-gateway.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/OsamaElsa3dny/ecommerce-payment-gateway/issues"
+  },
+  "homepage": "https://github.com/OsamaElsa3dny/ecommerce-payment-gateway#readme"
+}

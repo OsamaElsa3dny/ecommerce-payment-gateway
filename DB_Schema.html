@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<style>
+body { font-family: var(--font-sans); color: var(--color-text-primary); margin: 0; padding: 16px 0; }
+h2 { font-size: 16px; font-weight: 500; margin: 0 0 16px; color: var(--color-text-secondary); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.card { border: 0.5px solid var(--color-border-secondary); border-radius: 10px; overflow: hidden; }
+.card-header { padding: 10px 14px; font-size: 13px; font-weight: 500; }
+.card-body { padding: 10px 14px; }
+.field { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 3px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.field:last-child { border-bottom: none; }
+.field-name { color: var(--color-text-primary); font-family: var(--font-mono); }
+.field-note { color: var(--color-text-tertiary); font-size: 11px; }
+.pk { color: var(--color-text-warning); font-size: 10px; font-weight: 500; margin-left: 4px; }
+.fk { color: var(--color-text-info); font-size: 10px; font-weight: 500; margin-left: 4px; }
+
+.h-purple { background: #EEEDFE; color: #3C3489; }
+.h-teal   { background: #E1F5EE; color: #085041; }
+.h-blue   { background: #E6F1FB; color: #0C447C; }
+.h-coral  { background: #FAECE7; color: #712B13; }
+.h-green  { background: #EAF3DE; color: #27500A; }
+.h-amber  { background: #FAEEDA; color: #633806; }
+.h-gray   { background: #F1EFE8; color: #444441; }
+.h-pink   { background: #FBEAF0; color: #72243E; }
+
+@media (prefers-color-scheme: dark) {
+  .h-purple { background: #26215C; color: #CECBF6; }
+  .h-teal   { background: #04342C; color: #9FE1CB; }
+  .h-blue   { background: #042C53; color: #B5D4F4; }
+  .h-coral  { background: #4A1B0C; color: #F5C4B3; }
+  .h-green  { background: #173404; color: #C0DD97; }
+  .h-amber  { background: #412402; color: #FAC775; }
+  .h-gray   { background: #2C2C2A; color: #D3D1C7; }
+  .h-pink   { background: #4B1528; color: #F4C0D1; }
+}
+
+.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 20px 0 8px; }
+.section-label:first-child { margin-top: 0; }
+</style>
+<body>
+
+<div class="section-label">Users & Sellers</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-purple">users</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">name</span></div>
+      <div class="field"><span class="field-name">email</span><span class="field-note">unique</span></div>
+      <div class="field"><span class="field-name">password_hash</span></div>
+      <div class="field"><span class="field-name">role</span><span class="field-note">buyer / seller / admin</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-purple">sellers</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">store_name</span></div>
+      <div class="field"><span class="field-name">description</span></div>
+      <div class="field"><span class="field-name">verified</span><span class="field-note">boolean</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-gray">addresses</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">street</span></div>
+      <div class="field"><span class="field-name">city</span></div>
+      <div class="field"><span class="field-name">country</span></div>
+      <div class="field"><span class="field-name">postal_code</span></div>
+      <div class="field"><span class="field-name">is_default</span><span class="field-note">partial unique index</span></div>
+      <div class="field"><span class="field-name">deleted_at</span><span class="field-note">soft delete</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Products & Categories</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-teal">categories</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">name</span></div>
+      <div class="field"><span class="field-name">parent_id<span class="fk">FK</span></span><span class="field-note">self-ref, null = root</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-teal">products</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">seller_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">category_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">name</span></div>
+      <div class="field"><span class="field-name">description</span></div>
+      <div class="field"><span class="field-name">price</span></div>
+      <div class="field"><span class="field-name">stock</span></div>
+      <div class="field"><span class="field-name">is_active</span><span class="field-note">soft deactivate</span></div>
+      <div class="field"><span class="field-name">search_vector</span><span class="field-note">tsvector + pg_trgm</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-name">updated_at</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Cart</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-gray">cart_items</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">user_id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">product_id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">quantity</span></div>
+      <div class="field"><span class="field-name">expires_at</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Orders</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-purple">orders</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">total_price</span><span class="field-note">frozen at checkout</span></div>
+      <div class="field"><span class="field-name">shipping_street</span></div>
+      <div class="field"><span class="field-name">shipping_city</span></div>
+      <div class="field"><span class="field-name">shipping_country</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-name">updated_at</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-blue">seller_orders</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">seller_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">coupon_id<span class="fk">FK</span></span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">status</span></div>
+      <div class="field"><span class="field-name">subtotal</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-blue">seller_order_items</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">seller_order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">product_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">quantity</span></div>
+      <div class="field"><span class="field-name">price_snapshot</span></div>
+      <div class="field"><span class="field-note">UNIQUE (seller_order_id, product_id)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-coral">seller_order_status_history</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">seller_order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">seller_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">status</span></div>
+      <div class="field"><span class="field-name">changed_at</span></div>
+      <div class="field"><span class="field-name">note</span><span class="field-note">nullable</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Payments & Refunds</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-green">payments</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">amount</span></div>
+      <div class="field"><span class="field-name">method</span><span class="field-note">card / paypal / cod</span></div>
+      <div class="field"><span class="field-name">status</span><span class="field-note">pending / completed / failed / refunded</span></div>
+      <div class="field"><span class="field-name">transaction_id</span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-name">updated_at</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-amber">refunds</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">seller_order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">payment_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">amount</span><span class="field-note">partial</span></div>
+      <div class="field"><span class="field-name">reason</span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">status</span><span class="field-note">pending / approved / rejected / processed</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-name">updated_at</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Coupons</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-pink">coupons</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">seller_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">code</span><span class="field-note">unique, random</span></div>
+      <div class="field"><span class="field-name">discount_type</span><span class="field-note">percentage / fixed</span></div>
+      <div class="field"><span class="field-name">discount_value</span></div>
+      <div class="field"><span class="field-name">min_order_amount</span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">max_uses</span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">used_count</span></div>
+      <div class="field"><span class="field-name">expires_at</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-pink">coupon_products</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">coupon_id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">product_id<span class="pk">PK</span></span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-pink">coupon_usages</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">coupon_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">order_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">used_at</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label">Reviews & Restock</div>
+<div class="grid">
+  <div class="card">
+    <div class="card-header h-teal">reviews</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">product_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">seller_order_item_id<span class="fk">FK</span></span></div>
+      <div class="field"><span class="field-name">rating</span><span class="field-note">1–5</span></div>
+      <div class="field"><span class="field-name">comment</span><span class="field-note">nullable</span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-note">UNIQUE (user_id, product_id)</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header h-gray">restock_requests</div>
+    <div class="card-body">
+      <div class="field"><span class="field-name">product_id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">user_id<span class="pk">PK</span></span></div>
+      <div class="field"><span class="field-name">created_at</span></div>
+      <div class="field"><span class="field-note">deleted after email sent</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
