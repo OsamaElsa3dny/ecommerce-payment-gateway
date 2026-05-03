@@ -9,10 +9,12 @@ app.use(express.json({ limit: "10mb" }));
 const authRoutes = require("./APIs/routes/auth");
 const healthRoutes = require("./APIs/routes/health");
 const userRoutes = require("./APIs/routes/user");
+const productRoutes = require("./APIs/routes/product");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/health", healthRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/products", productRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -22,10 +24,13 @@ app.use((req, res) => {
 });
 app.use((err, req, res, next) => {
   console.error("Global error:", err);
-  res.status(500).json({
+  const statusCode = err.statusCode || 500;
+  const message = statusCode === 500 && process.env.NODE_ENV !== "development"
+    ? "internal server error"
+    : err.message;
+  res.status(statusCode).json({
     success: false,
-    message: "internal server error",
-    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+    message,
   });
 });
 const PORT = process.env.PORT || 3000;
@@ -45,9 +50,7 @@ async function startServer() {
 startServer();
 const shutdown = async (signal) => {
   console.log(`Received ${signal}, shutting down gracefully...`);
-  server.close(() => {
-    console.log("Server closed");
-  });
+  if (server) server.close(() => { console.log("Server closed"); });
   await db.end();
   process.exit(0);
 };

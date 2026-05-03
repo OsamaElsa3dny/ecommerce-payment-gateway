@@ -3,7 +3,7 @@ const validator = require('./validator');
 function authRegister(req, res, next) {
   const email = req.body.email.trim();
   const name = req.body.name.trim();
-  const password = req.body.password.trim();
+  const password = req.body.password;
   req.body.email = email;
   req.body.name = name;
   req.body.password = password;

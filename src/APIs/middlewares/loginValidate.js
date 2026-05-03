@@ -1,7 +1,7 @@
 const validator = require('./validator');
 function authLogin(req, res, next) {
   const email = req.body.email.trim();
-  const password = req.body.password.trim();
+  const password = req.body.password;
   req.body.email = email;
   req.body.password = password;
   if (!validator.validateEmail(email)) {
