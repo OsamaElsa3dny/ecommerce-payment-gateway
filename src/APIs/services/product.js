@@ -1,4 +1,5 @@
 const db = require('../../config/db');
+const AppError = require('../utils/AppError');
 
 const search = async ({ q, category_id, min_price, max_price, limit, offset }) => {
   const hasSearch = q !== null && q !== undefined;
@@ -73,5 +74,22 @@ const search = async ({ q, category_id, min_price, max_price, limit, offset }) =
     total: parseInt(countResult.rows[0].total, 10),
   };
 };
+const add = async ({ name, price, stock, category_id, description, seller_id }) => {
+  try {
+    const query = `
+    INSERT INTO products (name, price, stock, category_id, description, seller_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *`;
+    const params = [name, price, stock, category_id, description,seller_id ];
+    const result = await db.query(query, params);
+    return result.rows[0];
+  }
+  catch (error) {
+    if (error.code === '23505') {
+      throw new AppError('Product already exists', 409);
+    }
+    throw error;
+  }
+};
 
-module.exports = { search };
+module.exports = { search, add };

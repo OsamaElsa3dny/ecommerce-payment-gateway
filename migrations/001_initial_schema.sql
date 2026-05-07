@@ -62,9 +62,11 @@ CREATE TABLE products (
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   search_vector TSVECTOR,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (seller_id, name)
 );
 
+CREATE UNIQUE INDEX idx_products_seller_name ON products (seller_id, name);
 CREATE INDEX idx_products_search_vector ON products USING GIN (search_vector);
 CREATE INDEX idx_products_name_trgm ON products USING GIN (name gin_trgm_ops);
 CREATE INDEX idx_products_desc_trgm ON products USING GIN (description gin_trgm_ops);
