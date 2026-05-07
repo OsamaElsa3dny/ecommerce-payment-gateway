@@ -1,4 +1,5 @@
-const validator = require('./validator');
+const validator = require('./validationHelper');
+const AppError = require('../utils/AppError');
 
 function authRegister(req, res, next) {
   const email = req.body.email.trim();
@@ -8,22 +9,13 @@ function authRegister(req, res, next) {
   req.body.name = name;
   req.body.password = password;
   if (!validator.validateEmail(email)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Invalid email',
-    })
+    return next(new AppError('Invalid email', 400));
   }
   if (!validator.validatePassword(password)) {
-    return res.status(400).json({
-      success: false,
-      message: 'Password must be at least 8 characters',
-    })
+    return next(new AppError('Password must be at least 8 characters', 400));
   }
   if (!name) {
-    return res.status(400).json({
-      success: false,
-      message: 'Name is required',
-    })
+    return next(new AppError('Name is required', 400));
   }
   next();
 }

@@ -1,4 +1,4 @@
-const productService = require('../services/product');
+const productService = require('../services/productService');
 const db = require('../../config/db');
 const AppError = require('../utils/AppError');
 const searchProducts = async (req, res, next) => {

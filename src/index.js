@@ -10,11 +10,13 @@ const authRoutes = require("./APIs/routes/auth");
 const healthRoutes = require("./APIs/routes/health");
 const userRoutes = require("./APIs/routes/user");
 const productRoutes = require("./APIs/routes/product");
+const sellerRoutes = require("./APIs/routes/seller");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/health", healthRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/seller", sellerRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
