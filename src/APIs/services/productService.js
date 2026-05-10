@@ -91,5 +91,4 @@ const add = async ({ name, price, stock, category_id, description, seller_id }) 
     throw error;
   }
 };
-
-module.exports = { search, add };
+module.exports = { search, add};
