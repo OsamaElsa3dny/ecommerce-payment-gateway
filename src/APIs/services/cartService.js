@@ -36,5 +36,11 @@ const addToCart = async ({ product_id, quantity, user_id }) => {
   const res = await db.query(query, values);
   return res.rows[0];
 };
+const getCart = async ({ user_id }) => {
+  const query = `SELECT * FROM cart_items WHERE user_id = $1`;
+  const values = [user_id];
+  const res = await db.query(query, values);
+  return res.rows;
+}
 
-module.exports = { addToCart };
+module.exports = { addToCart , getCart };

@@ -1,5 +1,5 @@
 const AppError = require('../utils/AppError');
-const { addToCart } = require('../services/cartService');
+const { addToCart, getCart } = require('../services/cartService');
 
 const addToCartController = async (req, res, next) => {
   try {
@@ -24,5 +24,17 @@ const addToCartController = async (req, res, next) => {
     next(error);
   }
 };
-
-module.exports = { addToCartController };
+const getCartController = async (req, res, next) => {
+  try {
+    const user_id = req.user.id;
+    const cart = await getCart({ user_id });
+    res.status(200).json({
+      success: true,
+      message: 'Cart retrieved successfully',
+      data: cart
+    });
+  } catch (error) {
+    next(error)
+  }
+};
+module.exports = { addToCartController, getCartController };
